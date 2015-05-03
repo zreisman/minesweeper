@@ -2,15 +2,34 @@ require 'rspec'
 require 'board'
 
 describe Board do
-  
-  describe "Board.seed_board" do
-    let(:board) { Board.seed_board(12, 10) }
-    
-    
+  subject(:board) { Board.seed_board(12, 10) }
+
+  describe "self#seed_board" do
+
     it "creates a new instance of a board" do
-      new_board = board
-      
-      expect(new_board.class).to eq(Board)
+
+      expect(board.class).to eq(Board)
+    end
+
+    it "seeds the board with bombs" do
+      count = 0
+      board.grid.each do |row|
+        row.each {|item| count += 1 if item.bombed? == true}
+      end
+      expect(count).to eq(10)
+    end
+  end
+
+  describe "#[]" do
+
+    it "accesses the board using synactic sugar" do
+      expect(board[[5, 5]].flag).to eq(false)
+    end
+
+    it "assigns a new value using synactic sugar" do
+      subject[[5,5]].flag = true
+
+      expect(board[[5, 5]].flag).to eq(true)
     end
   end
 end
